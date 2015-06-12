@@ -20,7 +20,7 @@
     "repositories":[
         {
             "type": "git",
-            "url": "https://path.to/your/repo"
+            "url": "https://github.com/catalinivan15/yii2-simpleforum"
         }
     ],
     "autoload": {
