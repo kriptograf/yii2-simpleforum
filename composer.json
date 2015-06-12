@@ -15,7 +15,7 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "dektrium/yii2-user":"0.9.*@dev",
+        "dektrium/yii2-user":"*",
         "ivan/yii2-simpleforum": "dev-master"
     },
     "autoload": {
