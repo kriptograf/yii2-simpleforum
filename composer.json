@@ -2,8 +2,11 @@
     "name": "ivan/yii2-simpleforum",
     "description": "This extension will add a simple forum with minimal efforts.",
     "type": "yii2-extension",
-    "keywords": ["yii2","extension","simpleforum"],
+    "keywords": ["yii2","extension","simpleforum","simple forum"],
     "license": "MIT",
+    "support": {
+        "source": "https://github.com/catalinivan15/yii2-simpleforum"
+    },
     "authors": [
         {
             "name": "Catalin Ivan",
@@ -11,7 +14,8 @@
         }
     ],
     "require": {
-        "yiisoft/yii2": "*"
+        "yiisoft/yii2": "*",
+        "dektrium/yii2-user:0.9.*@dev"
     },
     "autoload": {
         "psr-4": {
