@@ -17,6 +17,12 @@
         "yiisoft/yii2": "*",
         "dektrium/yii2-user": "*"
     },
+    "repositories":[
+        {
+            "type": "git",
+            "url": "https://path.to/your/repo"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "ivan\\simpleforum\\": ""
