@@ -1,0 +1,21 @@
+{
+    "name": "ivan/yii2-simpleforum",
+    "description": "This extension will add a simple forum with minimal efforts.",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","simpleforum"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Catalin Ivan",
+            "email": "catalin.ivan15@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "ivan\\simpleforum\\": ""
+        }
+    }
+}
