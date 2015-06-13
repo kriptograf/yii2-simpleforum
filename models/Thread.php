@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\forum\models;
+namespace ivan\simpleforum\models;
 
 use Yii;
 

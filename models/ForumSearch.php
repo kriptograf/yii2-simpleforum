@@ -1,11 +1,11 @@
 <?php
 
-namespace app\modules\forum\models;
+namespace ivan\simpleforum\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\forum\models\Forum;
+use ivan\simpleforum\models\Forum;
 
 /**
  * ForumSearch represents the model behind the search form about `app\modules\forum\models\Forum`.

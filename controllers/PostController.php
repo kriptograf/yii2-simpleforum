@@ -1,10 +1,10 @@
 <?php
 
-namespace app\modules\forum\controllers;
+namespace ivan\simpleforum\controllers;
 
 use Yii;
-use app\modules\forum\models\Post;
-use app\modules\forum\models\PostSearch;
+use ivan\simpleforum\models\Post;
+use ivan\simpleforum\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

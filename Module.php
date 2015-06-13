@@ -1,10 +1,10 @@
 <?php
 
-namespace app\modules\forum;
+namespace ivan\simpleforum;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'app\modules\forum\controllers';
+    public $controllerNamespace = 'ivan\simpleforum\controllers';
 
     public function init()
     {

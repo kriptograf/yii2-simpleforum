@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\forum\controllers;
+namespace ivan\simpleforum\controllers;
 
 use yii\web\Controller;
 
