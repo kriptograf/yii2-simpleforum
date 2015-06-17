@@ -25,15 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'parent_id',
-            'title',
-            'description:ntext',
-            'is_locked',
-        ],
-    ]) ?>
+    <?= $this->render('_forums', ['forums' => $forums]); ?>
 
 </div>

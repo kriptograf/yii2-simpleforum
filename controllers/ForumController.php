@@ -4,6 +4,7 @@ namespace ivan\simpleforum\controllers;
 
 use Yii;
 use ivan\simpleforum\models\Forum;
+use ivan\simpleforum\models\Thread;
 use ivan\simpleforum\models\ForumSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -34,10 +35,15 @@ class ForumController extends Controller
     {
         $searchModel = new ForumSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $forums = Forum::find()
+            ->where(['parent_id' => NULL])
+            ->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'forums' => $forums,
         ]);
     }
 
@@ -47,10 +53,12 @@ class ForumController extends Controller
      */
     public function actionForums()
     {
-        $dataProvider = Forum::find()->all();
+        $forums = Forum::find()
+            ->where(['parent_id' => NULL])
+            ->all();
 
-        return $this->render('forums', [
-            'dataProvider' => $dataProvider,
+        return $this->render('_forums', [
+            'forums' => $forums,
         ]);
     }
 
@@ -61,8 +69,18 @@ class ForumController extends Controller
      */
     public function actionView($id)
     {
+        $forums = Forum::find()
+            ->where(['parent_id' => $id])
+            ->all();
+
+        $threads = Thread::find()
+            ->where(['forum_id' => $id])
+            ->all();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'forums' => $forums,
+            'threads' => $threads,
         ]);
     }
 

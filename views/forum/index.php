@@ -19,20 +19,5 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Forum', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'parent_id',
-            'title',
-            'description:ntext',
-            'is_locked',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
+    <?= $this->render('_forums', ['forums' => $forums]); ?>
 </div>
