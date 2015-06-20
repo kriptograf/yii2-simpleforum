@@ -9,7 +9,8 @@ use ivan\simpleforum\models\ForumSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use ivan\simpleforum\components\AccessRule;
+use yii\data\Pagination;
 /**
  * ForumController implements the CRUD actions for Forum model.
  */
@@ -18,10 +19,23 @@ class ForumController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
+           'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
+                //'only' => ['create', 'update', 'index', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'actions' => ['view', 'index'],
+                        'allow' => true,
+                        'roles' => ['?', '@', 'admin'],
+                    ],
                 ],
             ],
         ];
@@ -47,20 +61,6 @@ class ForumController extends Controller
         ]);
     }
 
-     /**
-     * Lists all Forum models.
-     * @return mixed
-     */
-    public function actionForums()
-    {
-        $forums = Forum::find()
-            ->where(['parent_id' => NULL])
-            ->all();
-
-        return $this->render('_forums', [
-            'forums' => $forums,
-        ]);
-    }
 
     /**
      * Displays a single Forum model.
@@ -73,14 +73,20 @@ class ForumController extends Controller
             ->where(['parent_id' => $id])
             ->all();
 
-        $threads = Thread::find()
-            ->where(['forum_id' => $id])
-            ->all();
+        $query = Thread::find()
+            ->where(['forum_id' => $id]);
+        $countQuery = clone $query;
+        $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
+        
+        $threads = $query->offset($pagination->offset)
+        ->limit($pagination->limit)
+        ->all();
 
         return $this->render('view', [
             'model' => $this->findModel($id),
             'forums' => $forums,
             'threads' => $threads,
+            'pagination' => $pagination
         ]);
     }
 
@@ -94,7 +100,7 @@ class ForumController extends Controller
         $model = new Forum();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->parent_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

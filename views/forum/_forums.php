@@ -6,7 +6,7 @@ use yii\helpers\Html;
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">Forums</h3>
+		<h3 class="panel-title"><?php if(Yii::$app->getRequest()->getQueryParam('id')):echo "Subforums"; else: echo "Forums"; endif; ?></h3>
 	</div>
 	<div class="panel-body">
 		<table class="table table-bordered table-hover">
@@ -18,33 +18,39 @@ use yii\helpers\Html;
 							echo "</br>";
 							echo "{$forum->description}";
 						echo "</td>";
+						
 						echo "<td class='col-md-2'>";
-							echo "Topics no:" . \ivan\simpleforum\models\Thread::find()
+							echo "Topics no: " . \ivan\simpleforum\models\Thread::find()
 								->where(['forum_id' => $forum->id])
 								->count();
 							echo "<br/>";
-							echo "Replies no:" . \ivan\simpleforum\models\Post::find()
+							echo "Replies no: " . \ivan\simpleforum\models\Post::find()
 								->joinWith(['thread'])
 								->where(['forum_id' => $forum->id])
 								->count();
 						echo "</td>";
+
 						echo "<td class='col-md-4'>";
-							echo \ivan\simpleforum\models\Post::find()
-								->joinWith(['thread'])
+							echo \ivan\simpleforum\models\Thread::find()
 								->where(['forum_id' => $forum->id])
 								->orderBy(['id' => SORT_DESC])
-								->one()->content;
+								->one()->subject;
 							echo "</br>";
-							echo \ivan\simpleforum\models\Post::find()
+							echo "on " . Yii::$app->formatter->asDatetime(\ivan\simpleforum\models\Post::find()
 								->joinWith(['thread'])
 								->where(['forum_id' => $forum->id])
 								->orderBy(['id' => SORT_DESC])
-								->one()->created;
-							echo \ivan\simpleforum\models\Post::find()
-								->joinWith(['thread'])
-								->where(['forum_id' => $forum->id])
-								->orderBy(['id' => SORT_DESC])
-								->one()->author_id;
+								->one()->created);
+							echo ", by " . 
+							dektrium\user\models\User::find()
+								->where([
+									'id' => \ivan\simpleforum\models\Post::find()
+										->joinWith(['thread'])
+										->where(['forum_id' => $forum->id])
+										->orderBy(['id' => SORT_DESC])
+										->one()->author_id
+								])
+								->one()->username;
 						echo "</td>";
 					echo "</tr>";
 				}

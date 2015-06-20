@@ -3,6 +3,8 @@
 namespace ivan\simpleforum\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "thread".
@@ -33,7 +35,7 @@ class Thread extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['forum_id', 'subject', 'is_locked', 'view_count', 'created'], 'required'],
+            [['forum_id', 'subject', 'is_locked', 'view_count'], 'required'],
             [['forum_id', 'is_locked', 'view_count', 'created'], 'integer'],
             [['subject'], 'string', 'max' => 200]
         ];
@@ -68,5 +70,17 @@ class Thread extends \yii\db\ActiveRecord
     public function getForum()
     {
         return $this->hasOne(Forum::className(), ['id' => 'forum_id']);
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created',
+                'updatedAtAttribute' => false,
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 }

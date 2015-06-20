@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\forum\models\Thread */
 
-$this->title = 'Create Thread';
+$this->title = 'Create Topic';
 $this->params['breadcrumbs'][] = ['label' => 'Threads', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'modelPost' => $modelPost
     ]) ?>
 
 </div>

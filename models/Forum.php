@@ -47,7 +47,7 @@ class Forum extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'parent_id' => 'Parent ID',
+            'parent_id' => 'Forum parent',
             'title' => 'Title',
             'description' => 'Description',
             'is_locked' => 'Is Locked',

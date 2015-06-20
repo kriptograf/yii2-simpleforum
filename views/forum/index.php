@@ -13,10 +13,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="forum-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Forum', ['create'], ['class' => 'btn btn-success']) ?>
+    		<?php
+    		if(Yii::$app->user->identity->isAdmin)
+        		echo Html::a('Create Forum', ['create'], ['class' => 'btn btn-success']) ;
+     	?>
     </p>
 
     <?= $this->render('_forums', ['forums' => $forums]); ?>

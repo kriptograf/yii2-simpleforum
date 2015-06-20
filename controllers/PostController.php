@@ -8,6 +8,7 @@ use ivan\simpleforum\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use ivan\simpleforum\components\AccessRule;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -17,10 +18,27 @@ class PostController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
+           'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
+                'rules' => [
+                    [
+                        'actions' => ['update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['@', 'admin'],
+                    ],
+                    [
+                        'actions' => ['view', 'index'],
+                        'allow' => true,
+                        'roles' => ['?', '@', 'admin'],
+                    ],
                 ],
             ],
         ];
@@ -61,9 +79,12 @@ class PostController extends Controller
     public function actionCreate()
     {
         $model = new Post();
+        $model->thread_id = Yii::$app->getRequest()->getQueryParam('thread_id');
+        $model->author_id = Yii::$app->user->identity->id;
+        $model->editor_id = Yii::$app->user->identity->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['thread/view', 'id' => $model->thread_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -80,6 +101,7 @@ class PostController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->editor_id = Yii::$app->user->identity->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

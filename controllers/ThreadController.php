@@ -3,11 +3,13 @@
 namespace ivan\simpleforum\controllers;
 
 use Yii;
+use ivan\simpleforum\models\Post;
 use ivan\simpleforum\models\Thread;
 use ivan\simpleforum\models\ThreadSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use ivan\simpleforum\components\AccessRule;
 
 /**
  * ThreadController implements the CRUD actions for Thread model.
@@ -17,10 +19,27 @@ class ThreadController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
+           'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
+                'rules' => [
+                    [
+                        'actions' => ['update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['@', 'admin'],
+                    ],
+                    [
+                        'actions' => ['view', 'index'],
+                        'allow' => true,
+                        'roles' => ['?', '@', 'admin'],
+                    ],
                 ],
             ],
         ];
@@ -48,8 +67,26 @@ class ThreadController extends Controller
      */
     public function actionView($id)
     {
+        $posts = Post::find()
+            ->where(['thread_id' => $id])
+            ->all();
+
+        $modelPost = new Post();
+        $modelPost->thread_id = Yii::$app->getRequest()->getQueryParam('id');
+        $modelPost->author_id = Yii::$app->user->identity->id;
+        $modelPost->editor_id = Yii::$app->user->identity->id;
+        if ($modelPost->load(Yii::$app->request->post()) && $modelPost->save()) {
+            Controller::refresh();
+        }
+
+        $model = $this->findModel($id);
+        $model->view_count = $model->view_count + 1;
+        $model->save();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'posts' => $posts,
+            'modelPost' => $modelPost,
         ]);
     }
 
@@ -60,13 +97,27 @@ class ThreadController extends Controller
      */
     public function actionCreate()
     {
+        $modelPost = new Post();
         $model = new Thread();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model->view_count = 0;
+        $model->forum_id = Yii::$app->getRequest()->getQueryParam('forum_id');
+        
+
+        if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()) && $model->validate($model)) {
+        
+            $model->save();
+
+            $modelPost->thread_id = $model->id;
+            $modelPost->author_id = Yii::$app->user->identity->id;
+            $modelPost->editor_id = Yii::$app->user->identity->id;
+
+            if($modelPost->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'modelPost' => $modelPost
             ]);
         }
     }

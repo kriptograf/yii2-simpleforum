@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\forum\models\Thread */
 
-$this->title = 'Update Thread: ' . ' ' . $model->id;
+$this->title = 'Update Topic: ' . ' ' . $model->subject;
 $this->params['breadcrumbs'][] = ['label' => 'Threads', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

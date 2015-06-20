@@ -3,6 +3,8 @@
 namespace ivan\simpleforum\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "post".
@@ -35,7 +37,7 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['thread_id', 'author_id', 'editor_id', 'content', 'created', 'updated'], 'required'],
+            [['thread_id', 'author_id', 'editor_id', 'content'], 'required'],
             [['thread_id', 'author_id', 'editor_id', 'created', 'updated'], 'integer'],
             [['content'], 'string']
         ];
@@ -79,5 +81,17 @@ class Post extends \yii\db\ActiveRecord
     public function getEditor()
     {
         return $this->hasOne(User::className(), ['id' => 'editor_id']);
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created',
+                'updatedAtAttribute' => 'updated',
+                // 'value' => new Expression('NOW()')
+            ],
+        ];
     }
 }

@@ -8,21 +8,21 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="post-form">
+<div class="post-form col-md-10">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'thread_id')->textInput() ?>
+    <!-- <?= $form->field($model, 'thread_id')->textInput() ?> -->
 
-    <?= $form->field($model, 'author_id')->textInput() ?>
+    <!-- <?= $form->field($model, 'author_id')->textInput() ?> -->
 
-    <?= $form->field($model, 'editor_id')->textInput() ?>
+    <!-- <?= $form->field($model, 'editor_id')->textInput() ?> -->
 
-    <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'content')->textarea(['rows' => 12]) ?>
 
-    <?= $form->field($model, 'created')->textInput() ?>
+    <!-- <?= $form->field($model, 'created')->textInput() ?> -->
 
-    <?= $form->field($model, 'updated')->textInput() ?>
+    <!-- <?= $form->field($model, 'updated')->textInput() ?> -->
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
