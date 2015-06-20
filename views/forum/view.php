@@ -41,11 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="pull-right">
         <?= Html::a('Start new topic', ['thread/create', 'forum_id' => Yii::$app->getRequest()->getQueryParam('id')], ['class' => 'btn btn-success']) ?>
     </div>
-<?php else:?>
+    <?php else:?>
     <div class="pull-right">
         <?= Html::a('Please log in to post a topic', ['/user/login'], ['class' => 'btn btn-success']) ?>
     </div>
-<?php endif;?>
-    <?= $this->render('_threads', ['threads' => $threads]);
-    ?>
+    <?php endif;?>
+    
+    <?= $this->render('_threads', [
+        'threads' => $threads
+        ]); ?>
 </div>

@@ -53,7 +53,7 @@ class Post extends \yii\db\ActiveRecord
             'thread_id' => 'Thread ID',
             'author_id' => 'Author ID',
             'editor_id' => 'Editor ID',
-            'content' => 'Content',
+            'content' => 'Message',
             'created' => 'Created',
             'updated' => 'Updated',
         ];

@@ -25,7 +25,15 @@ use yii\widgets\ActiveForm;
     <!-- <?= $form->field($model, 'updated')->textInput() ?> -->
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php if(!Yii::$app->user->isGuest):?>
+        <div>
+            <?= Html::submitButton($model->isNewRecord ? 'Reply' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        </div>
+        <?php else:?>
+        <div>
+            <?= Html::a('Please log in to reply', ['/user/login'], ['class' => 'btn btn-success']) ?>
+        </div>
+        <?php endif;?>
     </div>
 
     <?php ActiveForm::end(); ?>

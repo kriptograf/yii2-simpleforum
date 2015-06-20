@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php if(Yii::$app->user->identity->isAdmin):
-            echo "<span class='pull-right'>".Html::a('Reply to this topic', ['post/create', 'thread_id' => $model->id], ['class' => 'btn btn-success'])."</span>";
             echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
             echo Html::a('Delete', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
@@ -28,6 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             endif;
         ?>
+
+        <?php if(!Yii::$app->user->isGuest):?>
+        <div class="pull-right">
+            <?= Html::a('Reply to this topic', ['post/create', 'thread_id' => $model->id], ['class' => 'btn btn-success'])."</span>" ?>
+        </div>
+        <?php else:?>
+        <div class="pull-right">
+            <?= Html::a('Please log in to reply', ['/user/login'], ['class' => 'btn btn-success']) ?>
+        </div>
+        <?php endif;?>
     </p>
 
     <?= $this->render('_posts', [
