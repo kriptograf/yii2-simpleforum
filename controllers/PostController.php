@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use ivan\simpleforum\components\AccessRule;
+use yii\helpers\url;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -104,7 +105,7 @@ class PostController extends Controller
         $model->editor_id = Yii::$app->user->identity->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['thread/view','id' => $model->thread_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -120,9 +121,11 @@ class PostController extends Controller
      */
     public function actionDelete($id)
     {
+        $threadId = $this->findModel($id)->thread_id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['thread/view','id' => $threadId]);
+
     }
 
     /**

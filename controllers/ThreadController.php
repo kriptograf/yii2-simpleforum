@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use ivan\simpleforum\components\AccessRule;
+use yii\data\Pagination;
 
 /**
  * ThreadController implements the CRUD actions for Thread model.
@@ -68,7 +69,12 @@ class ThreadController extends Controller
     public function actionView($id)
     {
         $posts = Post::find()
-            ->where(['thread_id' => $id])
+            ->where(['thread_id' => $id]);
+
+        $countPosts = clone $posts;
+        $pagination = new Pagination(['totalCount' => $countPosts->count(), 'pageSize' => 5]);
+        $posts = $posts->offset($pagination->offset)
+            ->limit($pagination->limit)
             ->all();
 
         $modelPost = new Post();
@@ -87,6 +93,7 @@ class ThreadController extends Controller
             'model' => $this->findModel($id),
             'posts' => $posts,
             'modelPost' => $modelPost,
+            'pagination' => $pagination
         ]);
     }
 
@@ -105,7 +112,6 @@ class ThreadController extends Controller
         
 
         if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()) && $model->validate($model)) {
-        
             $model->save();
 
             $modelPost->thread_id = $model->id;
@@ -149,9 +155,10 @@ class ThreadController extends Controller
      */
     public function actionDelete($id)
     {
+        $forumId = $this->findModel($id)->forum_id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['forum/view', 'id' => $forumId]);
     }
 
     /**

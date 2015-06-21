@@ -2,13 +2,18 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\forum\models\Thread */
 
 $this->title = $model->subject;
 $this->params['breadcrumbs'][] = ['label' => 'Forums', 'url' => ['forum/index']];
-$this->params['breadcrumbs'][] = ['label' => 'Threads', 'url' => ['index']];
+
+$this->params['breadcrumbs'][] = [
+    'label' => \ivan\simpleforum\models\Forum::find()->where(['id' => $model->forum_id])->one()->title,
+    'url' => ['forum/view','id' => \ivan\simpleforum\models\Forum::find()->where(['id' => $model->forum_id])->one()->id]
+    ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="thread-view">
@@ -28,6 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
             endif;
         ?>
 
+        <?php echo yii\widgets\LinkPager::widget([
+            'pagination' => $pagination,
+        ]);?>
         <?php if(!Yii::$app->user->isGuest):?>
         <div class="pull-right">
             <?= Html::a('Reply to this topic', ['post/create', 'thread_id' => $model->id], ['class' => 'btn btn-success'])."</span>" ?>

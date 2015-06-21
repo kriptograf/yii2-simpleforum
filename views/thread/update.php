@@ -6,8 +6,12 @@ use yii\helpers\Html;
 /* @var $model app\modules\forum\models\Thread */
 
 $this->title = 'Update Topic: ' . ' ' . $model->subject;
-$this->params['breadcrumbs'][] = ['label' => 'Threads', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => 'Forums', 'url' => ['index']];
+$this->params['breadcrumbs'][] = [
+    'label' => \ivan\simpleforum\models\Forum::find()->where(['id' => $model->forum_id])->one()->title,
+    'url' => ['forum/view','id' => \ivan\simpleforum\models\Forum::find()->where(['id' => $model->forum_id])->one()->id]
+    ];
+$this->params['breadcrumbs'][] = ['label' => $model->subject, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="thread-update">

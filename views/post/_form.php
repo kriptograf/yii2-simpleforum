@@ -2,27 +2,22 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\web\User;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\forum\models\Post */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="post-form col-md-10">
+<div class="post-form col-md-12">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <!-- <?= $form->field($model, 'thread_id')->textInput() ?> -->
-
-    <!-- <?= $form->field($model, 'author_id')->textInput() ?> -->
-
-    <!-- <?= $form->field($model, 'editor_id')->textInput() ?> -->
-
-    <?= $form->field($model, 'content')->textarea(['rows' => 12]) ?>
-
-    <!-- <?= $form->field($model, 'created')->textInput() ?> -->
-
-    <!-- <?= $form->field($model, 'updated')->textInput() ?> -->
+    <?= $form->field($model, 'content')->widget('\kartik\markdown\MarkdownEditor', 
+    [
+        'showExport' => true,
+        'encodeLabels' => false,
+    ]) ?>
 
     <div class="form-group">
         <?php if(!Yii::$app->user->isGuest):?>
@@ -32,6 +27,7 @@ use yii\widgets\ActiveForm;
         <?php else:?>
         <div>
             <?= Html::a('Please log in to reply', ['/user/login'], ['class' => 'btn btn-success']) ?>
+            <?php Yii::$app->user->returnUrl = Yii::$app->request->url; ?>
         </div>
         <?php endif;?>
     </div>

@@ -8,6 +8,10 @@ use yii\helpers\Html;
 
 $this->title = 'Create Forum';
 $this->params['breadcrumbs'][] = ['label' => 'Forums', 'url' => ['index']];
+$this->params['breadcrumbs'][] = [
+    'label' => \ivan\simpleforum\models\Forum::find()->where(['id' => Yii::$app->getRequest()->getQueryParam('parent_id')])->one()->title,
+    'url' => ['forum/view','id' => \ivan\simpleforum\models\Forum::find()->where(['id' => Yii::$app->getRequest()->getQueryParam('parent_id')])->one()->id]
+    ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="forum-create">

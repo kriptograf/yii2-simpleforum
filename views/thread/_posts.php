@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use kartik\markdown\Markdown;
 
 ?>
 
@@ -19,7 +20,17 @@ use yii\helpers\Html;
 							->one()->username;
 						echo "</td>";
 						echo "<td>";
-							echo "Posted at " . Yii::$app->formatter->asDatetime($post->created);
+							echo "<span class='pull-right'>Posted at " . Yii::$app->formatter->asDatetime($post->created) . "</span>";
+							if(Yii::$app->user->identity->isAdmin) {
+								echo "<span>" . Html::a('Update', ['post/update', 'id' => $post->id], ['class' => 'btn btn-primary']) . "</span>";
+							     echo "<span>" . Html::a('Delete', ['post/delete', 'id' => $post->id], [
+							          'class' => 'btn btn-danger',
+							          'data' => [
+							               'confirm' => 'Are you sure you want to delete this item?',
+							               'method' => 'post',
+							           ],
+							     ]) . "</span>";
+							}
 						echo "</td>";
 					echo "</tr>";
 
@@ -40,7 +51,7 @@ use yii\helpers\Html;
 						echo "</td>";
 
 						echo "<td class='col-md-10'>";
-						echo $post->content;
+						echo nl2br(Markdown::convert($post->content));
 						echo "</td>";
 					echo "</tr>";
 				}

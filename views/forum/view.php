@@ -8,6 +8,11 @@ use yii\widgets\DetailView;
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Forums', 'url' => ['index']];
+if($model->parent != NULL) 
+    $this->params['breadcrumbs'][] = [
+        'label' => \ivan\simpleforum\models\Forum::find()->where(['id' => $model->parent_id])->one()->title,
+        'url' => ['forum/view','id' => \ivan\simpleforum\models\Forum::find()->where(['id' => $model->parent_id])->one()->id]
+    ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="forum-view">
@@ -16,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php if(Yii::$app->user->identity->isAdmin):
-            echo Html::a('Create Forum', ['create', 'parent_id' => $model->id], ['class' => 'btn btn-success']);
+            echo Html::a('Create Subforum', ['create', 'parent_id' => $model->id], ['class' => 'btn btn-success']);
             echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
             echo Html::a('Delete', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',

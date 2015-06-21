@@ -73,12 +73,11 @@ class ForumController extends Controller
             ->where(['parent_id' => $id])
             ->all();
 
-        $query = Thread::find()
+        $threads = Thread::find()
             ->where(['forum_id' => $id]);
-        $countQuery = clone $query;
+        $countQuery = clone $threads;
         $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
-        
-        $threads = $query->offset($pagination->offset)
+        $threads = $threads->offset($pagination->offset)
         ->limit($pagination->limit)
         ->all();
 
@@ -100,7 +99,10 @@ class ForumController extends Controller
         $model = new Forum();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->parent_id]);
+            if($model->parent_id == NULL)
+                return $this->redirect('index');
+            else
+                return $this->redirect(['view', 'id' => $model->parent_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -135,9 +137,14 @@ class ForumController extends Controller
      */
     public function actionDelete($id)
     {
+        $parentId = $this->findModel($id)->parent_id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        if($parentId == NULL)
+            return $this->redirect(['index']);
+        else
+            return $this->redirect(['view', 'id' => $parentId]);
+            
     }
 
     /**

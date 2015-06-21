@@ -5,13 +5,31 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\forum\models\Post */
+
 if(Yii::$app->controller->module->id == 'forum' && Yii::$app->controller->id == 'thread' && Yii::$app->controller->action->id == 'view')
 	$this->title = '';
-else
+else {
 	$this->title = 'Create Post';
+	$this->params['breadcrumbs'][] = ['label' => 'Forums', 'url' => ['forum/index']];
 
-$this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+	$this->params['breadcrumbs'][] = [
+	     'label' => \ivan\simpleforum\models\Forum::find()
+	    		->joinWith(['threads'])
+	    		->where(['thread.id' => Yii::$app->getRequest()->getQueryParam('thread_id')])->one()->title,
+	     'url' => ['forum/view', 'id' => \ivan\simpleforum\models\Forum::find()
+	    		->joinWith(['threads'])
+	    		->where(['thread.id' => Yii::$app->getRequest()->getQueryParam('thread_id')])->one()->id,
+	    	]];
+	$this->params['breadcrumbs'][] = [
+		'label' => \ivan\simpleforum\models\Thread::find()
+			->where(['id' => Yii::$app->getRequest()->getQueryParam('thread_id')])
+			->one()->subject, 
+		'url' => ['thread/view', 'id' => \ivan\simpleforum\models\Thread::find()
+			->where(['id' => Yii::$app->getRequest()->getQueryParam('thread_id')])
+			->one()->id]
+	];	
+	$this->params['breadcrumbs'][] = $this->title;
+}
 ?>
 <div class="post-create">
 

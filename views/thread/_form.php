@@ -29,7 +29,11 @@ use yii\widgets\ActiveForm;
     
     <div class="post-form col-md-10">
 
-    <?= $form->field($modelPost, 'content')->textarea(['rows' => 12]) ?>
+    <?= $form->field($modelPost, 'content')->widget('\kartik\markdown\MarkdownEditor', 
+    [
+        'showExport' => true,
+        'encodeLabels' => false,
+    ]) ?>
 
     </div>
 <?php endif; ?>
