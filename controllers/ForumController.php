@@ -46,10 +46,7 @@ class ForumController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {
-        $searchModel = new ForumSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+    {   
         $forums = Forum::find()
             ->where(['parent_id' => NULL])
             ->all();

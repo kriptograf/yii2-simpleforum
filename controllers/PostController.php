@@ -46,21 +46,6 @@ class PostController extends Controller
     }
 
     /**
-     * Lists all Post models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new PostSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
      * Displays a single Post model.
      * @param integer $id
      * @return mixed
