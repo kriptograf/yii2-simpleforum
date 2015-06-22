@@ -15,7 +15,9 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "dektrium/yii2-user": "*"
+        "dektrium/yii2-user": "*",
+        "nemmo/yii2-attachments": "dev-master",
+        "kartik-v/yii2-markdown": "dev-master"
     },
     "repositories":[
         {
