@@ -33,11 +33,11 @@ use yii\web\User;
     <div class="form-group">
         <?php if(!Yii::$app->user->isGuest):?>
         <div>
-            <?= Html::submitButton($model->isNewRecord ? 'Reply' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'onclick' => "$('#file-input').fileinput('upload');"]) ?>
+            <?= Html::submitButton($model->isNewRecord ? 'Reply' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success btn-sm' : 'btn btn-primary btn-sm', 'onclick' => "$('#file-input').fileinput('upload');"]) ?>
         </div>
         <?php else:?>
         <div>
-            <?= Html::a('Please log in to reply', ['/user/login'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Please log in to reply', ['/user/login'], ['class' => 'btn btn-success btn-sm']) ?>
             <?php Yii::$app->user->returnUrl = Yii::$app->request->url; ?>
         </div>
         <?php endif;?>

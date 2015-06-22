@@ -31,6 +31,7 @@ use yii\helpers\Html;
 						echo "</td>";
 
 						echo "<td class='col-md-4'>";
+						if(\ivan\simpleforum\models\Thread::find()->where(['forum_id' => $forum->id])->count() != 0) {
 							echo \ivan\simpleforum\models\Thread::find()
 								->where(['forum_id' => $forum->id])
 								->orderBy(['id' => SORT_DESC])
@@ -51,6 +52,9 @@ use yii\helpers\Html;
 										->one()->author_id
 								])
 								->one()->username;
+						} else {
+							echo "No topics";
+						}
 						echo "</td>";
 					echo "</tr>";
 				}

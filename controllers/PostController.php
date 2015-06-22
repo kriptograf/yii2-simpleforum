@@ -36,7 +36,7 @@ class PostController extends Controller
                         'roles' => ['@', 'admin'],
                     ],
                     [
-                        'actions' => ['view', 'index'],
+                        'actions' => ['view'],
                         'allow' => true,
                         'roles' => ['?', '@', 'admin'],
                     ],
@@ -79,17 +79,37 @@ class PostController extends Controller
      */
     public function actionCreate()
     {
+        if(Yii::$app->getRequest()->getQueryParam('thread_id') == NULL)
+            return $this->goBack();
+
         $model = new Post();
         $model->thread_id = Yii::$app->getRequest()->getQueryParam('thread_id');
         $model->author_id = Yii::$app->user->identity->id;
         $model->editor_id = Yii::$app->user->identity->id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['thread/view', 'id' => $model->thread_id]);
+        $isLocked = \ivan\simpleforum\models\Thread::find()
+            ->joinWith('posts')
+            ->where(['thread_id' => $model->thread_id])
+            ->one()->is_locked;
+
+        if(!$isLocked) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['thread/view', 'id' => $model->thread_id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+        } elseif($isLocked && Yii::$app->user->identity->isAdmin) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['thread/view', 'id' => $model->thread_id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->redirect(Yii::$app->request->referrer);
         }
     }
 

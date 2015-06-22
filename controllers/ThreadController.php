@@ -37,7 +37,7 @@ class ThreadController extends Controller
                         'roles' => ['@', 'admin'],
                     ],
                     [
-                        'actions' => ['view', 'index'],
+                        'actions' => ['view'],
                         'allow' => true,
                         'roles' => ['?', '@', 'admin'],
                     ],
@@ -104,28 +104,54 @@ class ThreadController extends Controller
      */
     public function actionCreate()
     {
+        if(Yii::$app->getRequest()->getQueryParam('forum_id') == NULL)
+            return $this->goBack();
+
         $modelPost = new Post();
         $model = new Thread();
 
         $model->view_count = 0;
         $model->forum_id = Yii::$app->getRequest()->getQueryParam('forum_id');
+
+        $isLocked = \ivan\simpleforum\models\Forum::find()
+            ->where(['id' => $model->forum_id])
+            ->one()->is_locked;
         
+        if(!$isLocked) {
+            if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()) && $model->validate($model)) {
+                $model->save();
 
-        if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()) && $model->validate($model)) {
-            $model->save();
+                $modelPost->thread_id = $model->id;
+                $modelPost->author_id = Yii::$app->user->identity->id;
+                $modelPost->editor_id = Yii::$app->user->identity->id;
 
-            $modelPost->thread_id = $model->id;
-            $modelPost->author_id = Yii::$app->user->identity->id;
-            $modelPost->editor_id = Yii::$app->user->identity->id;
+                if($modelPost->save())
+                    return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                    return $this->render('create', [
+                        'model' => $model,
+                        'modelPost' => $modelPost
+                    ]);
+            }
+        } elseif($isLocked && Yii::$app->user->identity->isAdmin) {
+            if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()) && $model->validate($model)) {
+                $model->save();
 
-            if($modelPost->save())
-                return $this->redirect(['view', 'id' => $model->id]);
+                $modelPost->thread_id = $model->id;
+                $modelPost->author_id = Yii::$app->user->identity->id;
+                $modelPost->editor_id = Yii::$app->user->identity->id;
+
+                if($modelPost->save())
+                    return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                    'modelPost' => $modelPost
+                ]);
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-                'modelPost' => $modelPost
-            ]);
-        }
+            return $this->redirect(Yii::$app->request->referrer);
+        } 
     }
 
     /**

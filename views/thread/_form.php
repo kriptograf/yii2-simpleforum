@@ -50,6 +50,6 @@ use yii\widgets\ActiveForm;
 <?php endif; ?>
 
     <div class="form-group col-md-12">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'onclick' => "$('#file-input').fileinput('upload');"]) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success btn-sm' : 'btn btn-primary btn-sm', 'onclick' => "$('#file-input').fileinput('upload');"]) ?>
     </div>
     <?php ActiveForm::end(); ?>

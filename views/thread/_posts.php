@@ -15,16 +15,16 @@ use kartik\markdown\Markdown;
 				foreach ($posts as $post) {
 					echo "<tr class='info'>";
 						echo "<td>";
-							echo dektrium\user\models\User::find()
+							echo "<b>" . dektrium\user\models\User::find()
 							->where(['id' => $post->author_id])
-							->one()->username;
+							->one()->username . "</b>";
 						echo "</td>";
 						echo "<td>";
 							echo "<span class='pull-right'>Posted at " . Yii::$app->formatter->asDatetime($post->created) . "</span>";
 							if(Yii::$app->user->identity->isAdmin) {
-								echo "<span>" . Html::a('Update', ['post/update', 'id' => $post->id], ['class' => 'btn btn-primary']) . "</span>";
+								echo "<span>" . Html::a('Update', ['post/update', 'id' => $post->id], ['class' => 'btn btn-primary btn-xs']) . "</span>";
 							     echo "<span>" . Html::a('Delete', ['post/delete', 'id' => $post->id], [
-							          'class' => 'btn btn-danger',
+							          'class' => 'btn btn-danger btn-xs',
 							          'data' => [
 							               'confirm' => 'Are you sure you want to delete this item?',
 							               'method' => 'post',
