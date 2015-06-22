@@ -94,6 +94,20 @@ class PostController extends Controller
 
         if(!$isLocked) {
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                // send email
+                \Yii::$app->mailer->compose('@vendor/ivan/yii2-simpleforum/views/mail/text/newpost', ['content' => $model->content])
+                    ->setFrom([\Yii::$app->params['forumEmailSender']])
+                    ->setTo(\dektrium\user\models\User::find()
+                        ->where([
+                            'id' => \ivan\simpleforum\models\Post::find()
+                                        ->where(['thread_id' => $model->thread_id])
+                                        ->orderBy(['id' => SORT_ASC])
+                                        ->one()->author_id
+                            ])
+                        ->one()->email)
+                    ->setSubject('New Post')
+                    ->send();
+
                 return $this->redirect(['thread/view', 'id' => $model->thread_id]);
             } else {
                 return $this->render('create', [

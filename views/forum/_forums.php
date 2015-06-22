@@ -43,7 +43,7 @@ use yii\helpers\Html;
 								->orderBy(['id' => SORT_DESC])
 								->one()->created);
 							echo ", by " . 
-							dektrium\user\models\User::find()
+							\dektrium\user\models\User::find()
 								->where([
 									'id' => \ivan\simpleforum\models\Post::find()
 										->joinWith(['thread'])

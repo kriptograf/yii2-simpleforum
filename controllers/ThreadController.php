@@ -82,6 +82,20 @@ class ThreadController extends Controller
         $modelPost->author_id = Yii::$app->user->identity->id;
         $modelPost->editor_id = Yii::$app->user->identity->id;
         if ($modelPost->load(Yii::$app->request->post()) && $modelPost->save()) {
+            // send email
+                \Yii::$app->mailer->compose('@vendor/ivan/yii2-simpleforum/views/mail/text/newpost', ['content' => $modelPost->content])
+                    ->setFrom([\Yii::$app->params['forumEmailSender']])
+                    ->setTo(\dektrium\user\models\User::find()
+                        ->where([
+                            'id' => \ivan\simpleforum\models\Post::find()
+                                        ->where(['thread_id' => $modelPost->thread_id])
+                                        ->orderBy(['id' => SORT_ASC])
+                                        ->one()->author_id
+                            ])
+                        ->one()->email)
+                    ->setSubject('New Post')
+                    ->send();
+
             Controller::refresh();
         }
 
@@ -125,8 +139,16 @@ class ThreadController extends Controller
                 $modelPost->author_id = Yii::$app->user->identity->id;
                 $modelPost->editor_id = Yii::$app->user->identity->id;
 
-                if($modelPost->save())
+                // send email to admin
+                \Yii::$app->mailer->compose('@vendor/ivan/yii2-simpleforum/views/mail/text/newtopic', ['subject' => $model->subject])
+                    ->setFrom(\Yii::$app->params['forumEmailSender'])
+                    ->setTo(\Yii::$app->params['adminEmail'])
+                    ->setSubject('New Topic')
+                    ->send();
+
+                if($modelPost->save()) {    
                     return $this->redirect(['view', 'id' => $model->id]);
+                }
             } else {
                     return $this->render('create', [
                         'model' => $model,
@@ -141,8 +163,9 @@ class ThreadController extends Controller
                 $modelPost->author_id = Yii::$app->user->identity->id;
                 $modelPost->editor_id = Yii::$app->user->identity->id;
 
-                if($modelPost->save())
+                if($modelPost->save()) {   
                     return $this->redirect(['view', 'id' => $model->id]);
+                }
             } else {
                 return $this->render('create', [
                     'model' => $model,

@@ -14,12 +14,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
 
+    <?php if(\Yii::$app->user->identity->isAdmin):?>
     <?= $form->field($model, 'is_locked')
       ->dropDownList(
         array('0' => 'No',
         '1' => 'Yes')
-        )
-    ?>
+        ) ?>
+    <?php else:
+        echo $form->field($model, 'is_locked')->hiddenInput(['value' => 0])->label('');
+    endif; ?>
 
     <?= !$model->isNewRecord ? $form->field($model, 'view_count')->textInput(['maxlength' => true]): '' ?>
 
