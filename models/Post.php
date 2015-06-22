@@ -86,11 +86,13 @@ class Post extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            [
+           'timestampBehavior' => [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created',
+                'createdAtAttribute' => 'created', 
                 'updatedAtAttribute' => 'updated',
-                // 'value' => new Expression('NOW()')
+            ],
+            'fileBehavior' => [
+                'class' => \nemmo\attachments\behaviors\FileBehavior::className()
             ],
         ];
     }

@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 
 <div class="thread-form col-md-5">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
     <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
 
@@ -35,10 +35,21 @@ use yii\widgets\ActiveForm;
         'encodeLabels' => false,
     ]) ?>
 
+    <?= \nemmo\attachments\components\AttachmentsInput::widget([
+        'id' => 'file-input', 
+        'model' => $modelPost,
+        'options' => [
+            'multiple' => true,
+        ],
+        'pluginOptions' => [  
+            'maxFileCount' => 10 
+        ]
+    ]) ?>
+
     </div>
 <?php endif; ?>
 
     <div class="form-group col-md-12">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'onclick' => "$('#file-input').fileinput('upload');"]) ?>
     </div>
     <?php ActiveForm::end(); ?>

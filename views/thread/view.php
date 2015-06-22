@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);?>
         <?php if(!Yii::$app->user->isGuest):?>
         <div class="pull-right">
-            <?= Html::a('Reply to this topic', ['post/create', 'thread_id' => $model->id], ['class' => 'btn btn-success'])."</span>" ?>
+            <?= Html::a('Reply to this topic', ['post/create', 'thread_id' => $model->id], ['class' => 'btn btn-success','onclick' => "$('#file-input').fileinput('upload');"]) ?>
         </div>
         <?php else:?>
         <div class="pull-right">

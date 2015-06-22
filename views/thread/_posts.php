@@ -51,7 +51,13 @@ use kartik\markdown\Markdown;
 						echo "</td>";
 
 						echo "<td class='col-md-10'>";
-						echo nl2br(Markdown::convert($post->content));
+						echo nl2br(Markdown::convert($post->content)) . "</br>";
+						if ($post->files != NULL) {
+							echo "Attachments: </br>";
+							foreach ($post->files as $file) {
+	    							echo Html::a($file->name, ['/attachments/file/download', 'id' => $file->id]) . " ";
+							}
+						}
 						echo "</td>";
 					echo "</tr>";
 				}

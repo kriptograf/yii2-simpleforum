@@ -11,7 +11,7 @@ use yii\web\User;
 
 <div class="post-form col-md-12">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
     <?= $form->field($model, 'content')->widget('\kartik\markdown\MarkdownEditor', 
     [
@@ -19,10 +19,21 @@ use yii\web\User;
         'encodeLabels' => false,
     ]) ?>
 
+    <?= \nemmo\attachments\components\AttachmentsInput::widget([
+        'id' => 'file-input', 
+        'model' => $model,
+        'options' => [
+            'multiple' => true,
+        ],
+        'pluginOptions' => [  
+            'maxFileCount' => 10 
+        ]
+    ]) ?>
+
     <div class="form-group">
         <?php if(!Yii::$app->user->isGuest):?>
         <div>
-            <?= Html::submitButton($model->isNewRecord ? 'Reply' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <?= Html::submitButton($model->isNewRecord ? 'Reply' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'onclick' => "$('#file-input').fileinput('upload');"]) ?>
         </div>
         <?php else:?>
         <div>
