@@ -63,8 +63,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'posts' => $posts,
     ]); ?>
 
-    <?php if($model->is_locked && !Yii::$app->user->identity->isAdmin) {
-    } else {
+    <?php if($model->is_locked && Yii::$app->user->identity->isAdmin) {
+        echo $this->render('@vendor/ivan/yii2-simpleforum/views/post/create', [
+            'model' => $modelPost,
+        ]);
+    } elseif (!$model->is_locked && !Yii::$app->user->isGuest) {
         echo $this->render('@vendor/ivan/yii2-simpleforum/views/post/create', [
             'model' => $modelPost,
         ]);

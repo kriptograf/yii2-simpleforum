@@ -117,13 +117,14 @@ class ThreadController extends Controller
             ->one()->is_locked;
         
         if(!$isLocked) {
-            if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()) && $model->validate($model)) {
-                $model->save();
+            if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()->content) && 
+                $model->validate($model) && $model->validate($modelPost)) {
 
                 $modelPost->thread_id = $model->id;
                 $modelPost->author_id = Yii::$app->user->identity->id;
                 $modelPost->editor_id = Yii::$app->user->identity->id;
 
+                if($model->save() && $modelPost->save()) {    
                 // send email to admin
                 \Yii::$app->mailer->compose('@vendor/ivan/yii2-simpleforum/views/mail/text/newtopic', ['subject' => $model->subject])
                     ->setFrom(\Yii::$app->params['forumEmailSender'])
@@ -131,7 +132,6 @@ class ThreadController extends Controller
                     ->setSubject('New Topic')
                     ->send();
 
-                if($modelPost->save()) {    
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             } else {
@@ -141,14 +141,14 @@ class ThreadController extends Controller
                     ]);
             }
         } elseif($isLocked && Yii::$app->user->identity->isAdmin) {
-            if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()) && $model->validate($model)) {
-                $model->save();
-
+            if ($model->load(Yii::$app->request->post()) && $modelPost->load(Yii::$app->request->post()->content) && 
+                $model->validate($model) && $model->validate($modelPost)) {
+              
                 $modelPost->thread_id = $model->id;
                 $modelPost->author_id = Yii::$app->user->identity->id;
                 $modelPost->editor_id = Yii::$app->user->identity->id;
 
-                if($modelPost->save()) {   
+                if($model->save() && $modelPost->save()) {   
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             } else {
