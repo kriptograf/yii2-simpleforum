@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
     <?php } else {?>
             <div class="pull-right">
-                <?= Html::a('Start new topic', ['thread/create', 'forum_id' => Yii::$app->getRequest()->getQueryParam('id')], ['class' => 'btn btn-success btn-sm disabled']) ?>
+                <?= Html::a('Forum locked', ['thread/create', 'forum_id' => Yii::$app->getRequest()->getQueryParam('id')], ['class' => 'btn btn-success btn-sm disabled']) ?>
             </div>
     <?php } ?>  
     
