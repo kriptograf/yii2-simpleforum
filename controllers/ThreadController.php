@@ -57,7 +57,7 @@ class ThreadController extends Controller
             ->where(['thread_id' => $id]);
 
         $countPosts = clone $posts;
-        $pagination = new Pagination(['totalCount' => $countPosts->count(), 'pageSize' => 5]);
+        $pagination = new Pagination(['totalCount' => $countPosts->count(), 'pageSize' => 10]);
         $posts = $posts->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
