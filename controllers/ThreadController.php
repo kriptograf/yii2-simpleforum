@@ -148,6 +148,13 @@ class ThreadController extends Controller
                 $modelPost->editor_id = Yii::$app->user->identity->id;
                 $modelPost->save();
 
+                // send email to admin
+                \Yii::$app->mailer->compose('@vendor/ivan/yii2-simpleforum/views/mail/text/newtopic', ['subject' => $model->subject])
+                    ->setFrom(\Yii::$app->params['forumEmailSender'])
+                    ->setTo(\Yii::$app->params['adminEmail'])
+                    ->setSubject('New Topic')
+                    ->send();
+
                     return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [
