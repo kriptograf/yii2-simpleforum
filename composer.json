@@ -14,7 +14,6 @@
         }
     ],
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "yiisoft/yii2": "*",
         "dektrium/yii2-user": "*",
