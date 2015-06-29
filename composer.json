@@ -13,10 +13,12 @@
             "email": "catalin.ivan15@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "yiisoft/yii2": "*",
         "dektrium/yii2-user": "*",
+    },
+    "require-dev": {
         "nemmo/yii2-attachments": "dev-master",
         "kartik-v/yii2-markdown": "dev-master"
     },
