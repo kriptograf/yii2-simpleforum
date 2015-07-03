@@ -16,7 +16,7 @@ use yii\helpers\Html;
 						echo "<td class='col-md-6'>";
 							echo Html::a($forum->title, ['forum/view', 'id' => $forum->id]);
 							echo "</br>";
-							echo "{$forum->description}";
+							echo "2".Html::encode("{$forum->description}");
 						echo "</td>";
 						
 						echo "<td class='col-md-2'>";
@@ -32,10 +32,10 @@ use yii\helpers\Html;
 
 						echo "<td class='col-md-4'>";
 						if(\ivan\simpleforum\models\Thread::find()->where(['forum_id' => $forum->id])->count() != 0) {
-							echo \ivan\simpleforum\models\Thread::find()
+							echo Html::encode(\ivan\simpleforum\models\Thread::find()
 								->where(['forum_id' => $forum->id])
 								->orderBy(['id' => SORT_DESC])
-								->one()->subject;
+								->one()->subject);
 							echo "</br>";
 							echo "on " . Yii::$app->formatter->asDatetime(\ivan\simpleforum\models\Post::find()
 								->joinWith(['thread'])
